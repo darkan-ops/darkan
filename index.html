@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Для Енлик</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  min-height:100vh;
+  font-family:Georgia,serif;
+  background:linear-gradient(135deg,#fff8f3,#f4dce5,#efe2d8);
+  color:#3d2b2b;
+  overflow:hidden;
+}
+
+.screen{
+  min-height:100vh;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  text-align:center;
+}
+
+.active{display:flex}
+
+.card{
+  max-width:820px;
+  width:100%;
+  padding:42px 26px;
+  border-radius:34px;
+  background:rgba(255,255,255,.70);
+  backdrop-filter:blur(18px);
+  box-shadow:0 25px 80px rgba(130,80,90,.22);
+  border:1px solid rgba(255,255,255,.85);
+  animation:fade .6s ease;
+}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:none}
+}
+
+h1{font-size:44px;color:#7b4b53;margin-bottom:18px}
+h2{font-size:32px;color:#7b4b53;margin-bottom:16px}
+p{font-size:20px;line-height:1.7;margin-bottom:18px}
+
+button{
+  border:0;
+  padding:14px 28px;
+  margin:8px;
+  border-radius:999px;
+  background:#8f5d65;
+  color:white;
+  font-size:17px;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(143,93,101,.35);
+}
+
+button.alt{background:#c79aa4}
+
+input{
+  padding:15px 20px;
+  border-radius:999px;
+  border:1px solid #d7aeb7;
+  width:80%;
+  max-width:330px;
+  font-size:18px;
+  text-align:center;
+  margin:15px;
+}
+
+input[type="date"]{
+  color:#7b4b53;
+  background:white;
+}
+
+.photo{
+  width:100%;
+  max-height:560px;
+  object-fit:cover;
+  border-radius:30px;
+  box-shadow:0 22px 70px rgba(120,70,80,.28);
+  margin:22px 0;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-top:18px;
+}
+
+.box{
+  padding:22px;
+  border-radius:24px;
+  background:rgba(255,255,255,.65);
+  cursor:pointer;
+  font-size:18px;
+  transition:.25s;
+}
+
+.box:hover{transform:translateY(-4px)}
+.locked{filter:blur(3px);opacity:.55}
+.opened{filter:none;opacity:1;background:#fff}
+
+.heart{
+  position:fixed;
+  top:-30px;
+  color:rgba(123,75,83,.4);
+  animation:fall linear forwards;
+  z-index:-1;
+}
+
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg)}
+}
+
+.envelope{
+  font-size:80px;
+  cursor:pointer;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  50%{transform:scale(1.08)}
+}
+
+#clickCount{
+  font-size:32px;
+  color:#7b4b53;
+}
+
+@media(max-width:650px){
+  h1{font-size:34px}
+  h2{font-size:27px}
+  p{font-size:18px}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<div class="screen active" id="login">
+  <div class="card">
+    <h1>Доброе утро, Енлик 🤍</h1>
+    <p>
+      Пока день только начинается,  
+      я хотел оставить здесь одну тёплую мысль.
+    </p>
+    <p>Чтобы открыть её, выбери дату нашей первой встречи.</p>
+
+    <input id="datePass" type="date">
+    <br>
+    <button onclick="checkPass()">Открыть</button>
+
+    <p id="wrong" style="display:none;color:#9b4b55">
+      Подсказка: это было в 2018 🤍
+    </p>
+  </div>
+</div>
+
+<div class="screen" id="ourPhoto">
+  <div class="card">
+    <h1>13 мая 2018 🤍</h1>
+    <p>День, с которого началась наша история.</p>
+
+    <img src="images/us.jpg" class="photo" alt="Наше фото">
+
+    <p>
+      И если честно… я очень рад,  
+      что тогда всё началось именно с тебя.
+    </p>
+
+    <button onclick="next('s1')">Продолжить</button>
+  </div>
+</div>
+
+<div class="screen" id="s1">
+  <div class="card">
+    <h1>Енлик</h1>
+    <p>
+      Я хотел сделать не просто открытку.  
+      Я хотел сделать маленькое место, где каждая кнопка — про тебя.
+    </p>
+    <button onclick="next('quiz1')">Начать</button>
+  </div>
+</div>
+
+<div class="screen" id="quiz1">
+  <div class="card">
+    <h2>Вопрос 1</h2>
+    <p>Кто делает мой день теплее?</p>
+    <button onclick="right('quiz2')">Енлик</button>
+    <button class="alt" onclick="wrongAnswer()">Не знаю</button>
+  </div>
+</div>
+
+<div class="screen" id="quiz2">
+  <div class="card">
+    <h2>Вопрос 2</h2>
+    <p>Что я хотел получить, когда делал этот сайт?</p>
+    <button class="alt" onclick="wrongAnswer()">Сложный проект</button>
+    <button onclick="right('cards')">Твою улыбку</button>
+  </div>
+</div>
+
+<div class="screen" id="cards">
+  <div class="card">
+    <h2>Открой 4 причины</h2>
+    <p>Нажимай на карточки по очереди.</p>
+
+    <div class="grid">
+      <div class="box" onclick="openBox(this,'Ты очень нежная 🤍')">Закрыто</div>
+      <div class="box locked" onclick="openBox(this,'Самая красивая ✨')">Закрыто</div>
+      <div class="box locked" onclick="openBox(this,'С тобой спокойно и тепло 🌙')">Закрыто</div>
+      <div class="box locked" onclick="openBox(this,'Ты человек, которого хочется беречь 🌹')">Закрыто</div>
+    </div>
+
+    <br>
+    <button onclick="next('clicker')">Дальше</button>
+  </div>
+</div>
+
+<div class="screen" id="clicker">
+  <div class="card">
+    <h2>Маленькое задание</h2>
+    <p>Нажми на сердце 10 раз.</p>
+    <div id="clickCount">🤍 0 / 10</div>
+    <button onclick="heartClick()">Нажать</button>
+  </div>
+</div>
+
+<div class="screen" id="envelope">
+  <div class="card">
+    <h2>Для тебя письмо</h2>
+    <p>Нажми на конверт.</p>
+    <div class="envelope" onclick="next('letter')">💌</div>
+  </div>
+</div>
+
+<div class="screen" id="letter">
+  <div class="card">
+    <h2>Енлик</h2>
+    <p>
+      Я не всегда умею говорить идеально красиво,  
+      но мне хотелось, чтобы ты почувствовала главное.
+    </p>
+    <p>
+      Ты для меня особенная.  
+      В тебе есть нежность, свет и тепло, которые хочется беречь.
+    </p>
+    <p>
+      Мне нравится радовать тебя.  
+      Нравится думать о тебе.  
+      Нравится, что ты есть в моей жизни.
+    </p>
+    <button onclick="next('final')">Финал</button>
+  </div>
+</div>
+
+<div class="screen" id="final">
+  <div class="card">
+    <h1>Ты прекрасна 🤍</h1>
+    <p>
+      И если ты сейчас улыбаешься —  
+      значит, всё получилось.
+    </p>
+    <button onclick="restart()">Пройти ещё раз</button>
+  </div>
+</div>
+
+<script>
+let clicks = 0;
+let opened = 0;
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function next(id){
+  show(id);
+  hearts();
+}
+
+function restart(){
+  clicks = 0;
+  opened = 0;
+  document.getElementById('clickCount').innerHTML = '🤍 0 / 10';
+  show('login');
+}
+
+function checkPass(){
+  const date = document.getElementById('datePass').value;
+
+  if(date === '2018-05-13'){
+    next('ourPhoto');
+  } else {
+    document.getElementById('wrong').style.display='block';
+  }
+}
+
+function right(id){
+  hearts();
+  setTimeout(()=>next(id),400);
+}
+
+function wrongAnswer(){
+  hearts();
+  alert('Нет, правильный ответ — Енлик 🤍');
+}
+
+function openBox(el,text){
+  if(el.classList.contains('opened')) return;
+
+  el.classList.remove('locked');
+  el.classList.add('opened');
+  el.innerHTML = text;
+  opened++;
+  hearts();
+
+  if(opened >= 4){
+    setTimeout(()=>alert('Вот теперь можно идти дальше 🤍'),300);
+  }
+}
+
+function heartClick(){
+  clicks++;
+  document.getElementById('clickCount').innerHTML = '🤍 ' + clicks + ' / 10';
+  hearts();
+
+  if(clicks >= 10){
+    setTimeout(()=>next('envelope'),500);
+  }
+}
+
+function createHeart(){
+  const h = document.createElement('div');
+  h.className = 'heart';
+  h.innerHTML = '♥';
+  h.style.left = Math.random()*100 + 'vw';
+  h.style.fontSize = (Math.random()*22+14) + 'px';
+  h.style.animationDuration = (Math.random()*4+5) + 's';
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),9000);
+}
+
+function hearts(){
+  for(let i=0;i<18;i++){
+    setTimeout(createHeart,i*70);
+  }
+}
+
+setInterval(createHeart,1100);
+</script>
+
+</body>
+</html>
+
